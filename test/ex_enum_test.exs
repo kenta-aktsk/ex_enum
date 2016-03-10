@@ -4,8 +4,8 @@ defmodule ExEnumTest do
 
   defmodule Status do
     use ExEnum
-    item id: 0, type: :invalid, name: "this is invalid"
-    item id: 1, type: :valid, name: "this is valid"
+    row id: 0, type: :invalid, text: "this is invalid"
+    row id: 1, type: :valid, text: "this is valid"
     accessor :type
   end
 
@@ -15,8 +15,8 @@ defmodule ExEnumTest do
 
   test "all" do
     list = [
-      %{id: 0, type: :invalid, name: "this is invalid"},
-      %{id: 1, type: :valid, name: "this is valid"}
+      %{id: 0, type: :invalid, text: "this is invalid"},
+      %{id: 1, type: :valid, text: "this is valid"}
     ]
     assert list == Status.all
   end
@@ -25,7 +25,7 @@ defmodule ExEnumTest do
     status = Status.get(0)
     assert status.id == 0
     assert status.type == :invalid
-    assert status.name == "this is invalid"
+    assert status.text == "this is invalid"
   end
 
   test "get with wrong parameter" do
@@ -37,7 +37,7 @@ defmodule ExEnumTest do
     status = Status.get(1)
     assert status.id == 1
     assert status.type == :valid
-    assert status.name == "this is valid"
+    assert status.text == "this is valid"
   end
 
   test "get! with wrong parameter" do
@@ -51,12 +51,12 @@ defmodule ExEnumTest do
     assert status.type == :invalid
 
     status = Status.get_by(id: 0, type: :invalid)
-    assert status.name == "this is invalid"
+    assert status.text == "this is invalid"
 
-    status = Status.get_by(name: "this is valid")
+    status = Status.get_by(text: "this is valid")
     assert status.type == :valid
 
-    status = Status.get_by(name: "this is valid", type: :valid)
+    status = Status.get_by(text: "this is valid", type: :valid)
     assert status.id == 1
   end
 
@@ -67,7 +67,7 @@ defmodule ExEnumTest do
     status = Status.get_by(id: -1, type: :invalid)
     assert is_nil(status)
 
-    status = Status.get_by(name: "this is vali")
+    status = Status.get_by(text: "this is vali")
     assert is_nil(status)
 
     status = Status.get_by(nam: "this is valid")
@@ -87,12 +87,12 @@ defmodule ExEnumTest do
     assert status.type == :invalid
 
     status = Status.get_by!(id: 0, type: :invalid)
-    assert status.name == "this is invalid"
+    assert status.text == "this is invalid"
 
-    status = Status.get_by!(name: "this is valid")
+    status = Status.get_by!(text: "this is valid")
     assert status.type == :valid
 
-    status = Status.get_by!(name: "this is valid", type: :valid)
+    status = Status.get_by!(text: "this is valid", type: :valid)
     assert status.id == 1
   end
 
@@ -106,7 +106,7 @@ defmodule ExEnumTest do
     end
 
     assert_raise RuntimeError, fn ->
-      _ = Status.get_by!(name: "this is vali")
+      _ = Status.get_by!(text: "this is vali")
     end
 
     assert_raise RuntimeError, fn ->

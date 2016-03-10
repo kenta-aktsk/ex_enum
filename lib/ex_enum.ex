@@ -1,7 +1,7 @@
 defmodule ExEnum do
   defmacro __using__(_opts) do
     quote location: :keep do
-      import unquote(__MODULE__), only: [item: 1, accessor: 1]
+      import unquote(__MODULE__), only: [row: 1, accessor: 1]
       Module.register_attribute __MODULE__, :collection, accumulate: true
       Module.put_attribute __MODULE__, :accessor, nil
       @before_compile unquote(__MODULE__)
@@ -25,7 +25,7 @@ defmodule ExEnum do
     end
   end
 
-  defmacro item(kw) do
+  defmacro row(kw) do
     unless Keyword.keyword?(kw) do
       unquote(__MODULE__).argument_type_error(kw, "keyword list")
     end
