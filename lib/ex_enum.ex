@@ -45,22 +45,24 @@ defmodule ExEnum do
 
   defmacro __before_compile__(env) do
     collection = Module.get_attribute(env.module, :collection) |> Enum.reverse
-    quoted = quote location: :keep do
-      def all, do: unquote(Macro.escape(collection))
-    end
-
     accessor = Module.get_attribute(env.module, :accessor)
     access_methods = case accessor do
       nil -> []
       key when is_atom(key) -> collection |> Enum.map(&(&1[key]))
     end
-    [quoted | for func <- access_methods do
+
+    quoted = for func <- access_methods do
       quote location: :keep do
         def unquote(func)() do 
           get_by([{:"#{unquote(accessor)}", unquote(func)}])
         end
       end
-    end]
+    end
+
+    quote location: :keep do
+      def all, do: unquote(Macro.escape(collection))
+      unquote(quoted)
+    end
   end
 
   def argument_type_error(arg, type) do
