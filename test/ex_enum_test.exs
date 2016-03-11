@@ -31,6 +31,10 @@ defmodule ExEnumTest do
   test "get with wrong parameter" do
     status = Status.get(3)
     assert is_nil(status)
+
+    assert_raise FunctionClauseError, fn ->
+      _ = Status.get("1")
+    end
   end
 
   test "get! with valid parameter" do
@@ -41,8 +45,12 @@ defmodule ExEnumTest do
   end
 
   test "get! with wrong parameter" do
-    assert_raise RuntimeError, fn -> 
+    assert_raise RuntimeError, fn ->
       _ = Status.get!(-1)
+    end
+
+    assert_raise FunctionClauseError, fn ->
+      _ = Status.get!("1")
     end
   end
 
@@ -73,11 +81,11 @@ defmodule ExEnumTest do
     status = Status.get_by(nam: "this is valid")
     assert is_nil(status)
 
-    assert_raise ArgumentError, fn -> 
+    assert_raise ArgumentError, fn ->
       _ = Status.get_by("invalid")
     end
 
-    assert_raise ArgumentError, fn -> 
+    assert_raise ArgumentError, fn ->
       _ = Status.get_by(%{id: 1})
     end
   end
@@ -113,12 +121,36 @@ defmodule ExEnumTest do
       _ = Status.get_by!(nam: "this is valid")
     end
 
-    assert_raise ArgumentError, fn -> 
+    assert_raise ArgumentError, fn ->
       _ = Status.get_by!("invalid")
     end
 
-    assert_raise ArgumentError, fn -> 
+    assert_raise ArgumentError, fn ->
       _ = Status.get_by!(%{id: 1})
+    end
+  end
+
+  test "select with valid parameter" do
+    list = [
+      {"this is invalid", 0},
+      {"this is valid", 1}
+    ]
+    assert list == Status.select([:text, :id])
+
+    list = [
+      {:invalid, "this is invalid"},
+      {:valid, "this is valid"}
+    ]
+    assert list == Status.select([:type, :text])
+  end
+
+  test "select with wrong parameter" do
+    assert_raise FunctionClauseError, fn ->
+      _ = Status.select({:text, :id})
+    end
+
+    assert_raise FunctionClauseError, fn ->
+      _ = Status.select("text")
     end
   end
 
@@ -129,7 +161,7 @@ defmodule ExEnumTest do
   end
 
   test "accessor with wrong function name" do
-    assert_raise UndefinedFunctionError, fn -> 
+    assert_raise UndefinedFunctionError, fn ->
       _ = Status.nodef
     end
   end
