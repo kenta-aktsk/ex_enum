@@ -46,6 +46,9 @@ Status.get(0)
 Status.get_by(text: "this is valid", type: :valid)
 # => %{id: 0, text: "this is valid", type: :valid}
 
+Status.select([:text, :id])
+# => [{"this is invalid", 0}, {"this is valid", 1}]
+
 Status.invalid
 # => %{id: 0, text: "this is invalid", type: :invalid}
 
@@ -62,5 +65,20 @@ Status.get!(-1)
 
 Status.get_by!(type: :wrong)
 # => ** (RuntimeError) no result
+
+```
+
+You can use these functions with Phoenix view helpers like below:
+
+```ex
+
+# index.html.eex
+<td><%= Status.get(user.status).text %></td>
+
+# form.html.eex
+<%= select f, :status, Status.select([:text, :id]), class: "form-control" %>
+
+# show.html.eex
+<%= Status.get(@user.status).text %>
 
 ```

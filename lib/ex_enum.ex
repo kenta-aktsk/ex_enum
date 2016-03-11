@@ -19,6 +19,13 @@ defmodule ExEnum do
       def get_by!(kw) do
         get_by(kw) |> check_result!
       end
+      def select(cols) when is_list(cols) do
+        Enum.map all, fn(row) ->
+          Enum.reduce cols, {}, fn(col, acc) ->
+            Tuple.append(acc, row[col])
+          end
+        end
+      end
       defp check_result!(p) do
         if p, do: p, else: raise RuntimeError, "no result"
       end
