@@ -1,0 +1,9 @@
+msgid ""
+msgstr ""
+"Language: ja\n"
+
+msgid "invalid"
+msgstr "無効"
+
+msgid "valid"
+msgstr "有効"
