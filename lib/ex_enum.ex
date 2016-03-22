@@ -27,7 +27,7 @@ defmodule ExEnum do
         end
       end
       defp check_result!(p) do
-        if p, do: p, else: raise RuntimeError, "no result"
+        p || raise RuntimeError, "no result"
       end
     end
   end
