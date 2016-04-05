@@ -23,12 +23,15 @@ defmodule ExEnum do
       def get_by!(kw) do
         get_by(kw) |> check_result!
       end
-      def select(cols) when is_list(cols) do
+      def select(fields) when is_list(fields) do
         Enum.map all, fn(row) ->
-          Enum.reduce cols, {}, fn(col, acc) ->
-            Tuple.append(acc, row[col])
+          Enum.reduce fields, {}, fn(field, acc) ->
+            Tuple.append(acc, row[field])
           end
         end
+      end
+      def select(field) when is_atom(field) do
+        Enum.map all, &(&1[field])
       end
       defp check_result!(p) do
         p || raise RuntimeError, "no result"

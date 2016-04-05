@@ -150,7 +150,7 @@ defmodule ExEnumTest do
     end
   end
 
-  test "select with valid parameter" do
+  test "select with valid list parameter" do
     list = [
       {"invalid", 0},
       {"valid", 1}
@@ -162,6 +162,14 @@ defmodule ExEnumTest do
       {:valid, "valid"}
     ]
     assert list == Status.select([:type, :text])
+  end
+
+  test "select with valid atom parameter" do
+    list = [0, 1]
+    assert list == Status.select(:id)
+
+    list = [:invalid, :valid]
+    assert list == Status.select(:type)
   end
 
   test "select with wrong parameter" do

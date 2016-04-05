@@ -50,6 +50,9 @@ Status.get_by(text: "valid", type: :valid)
 Status.select([:text, :id])
 # => [{"invalid", 0}, {"valid", 1}]
 
+Status.select(:id)
+# => [0, 1]
+
 Status.invalid
 # => %{id: 0, text: "invalid", type: :invalid}
 
