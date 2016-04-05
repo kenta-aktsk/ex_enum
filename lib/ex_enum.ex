@@ -88,19 +88,23 @@ defmodule ExEnum do
     end
 
     quote location: :keep do
-      defp do_translate(collection, nil), do: collection
-      defp do_translate(collection, key) do
-        Enum.map collection, fn(row) ->
-          update_in(row[key], &Gettext.dgettext(@backend, @domain, &1))
+      if is_nil(@translate) do
+        def all, do: unquote(Macro.escape(collection))
+      else
+        defp do_translate(collection, key) do
+          Enum.map collection, fn(row) ->
+            update_in(row[key], &Gettext.dgettext(@backend, @domain, &1))
+          end
         end
-      end
-      def all do
-        unquote(Macro.escape(collection)) |> do_translate(@translate)
+        def all do
+          unquote(Macro.escape(collection)) |> do_translate(@translate)
+        end
       end
       unquote(access_methods)
     end
   end
 
+  @spec argument_type_error(any, binary | atom) :: no_return
   def argument_type_error(arg, type) do
     raise ArgumentError, "argument `#{inspect arg}` must be a #{type}"
   end
