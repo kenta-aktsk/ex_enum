@@ -2,6 +2,7 @@
 /cover
 /deps
 /doc
+/lib/dialyzer_test.ex
 erl_crash.dump
 *.ez
 .DS_Store
