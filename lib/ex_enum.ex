@@ -18,20 +18,20 @@ defmodule ExEnum do
       end
       def get_by(kw) do
         unless Keyword.keyword?(kw), do: unquote(__MODULE__).argument_type_error(kw, "keyword list")
-        all |> Enum.find(&((kw -- Enum.into(&1, [])) == []))
+        all() |> Enum.find(&((kw -- Enum.into(&1, [])) == []))
       end
       def get_by!(kw) do
         get_by(kw) |> check_result!
       end
       def select(fields) when is_list(fields) do
-        Enum.map all, fn(row) ->
+        Enum.map all(), fn(row) ->
           Enum.reduce fields, {}, fn(field, acc) ->
             Tuple.append(acc, row[field])
           end
         end
       end
       def select(field) when is_atom(field) do
-        Enum.map all, &(&1[field])
+        Enum.map all(), &(&1[field])
       end
       defp check_result!(p) do
         p || raise RuntimeError, "no result"
